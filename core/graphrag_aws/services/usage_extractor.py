@@ -76,7 +76,7 @@ class BedrockTokenEstimator:
                 base_tokens += len(str(system_prompt)) // 4
                 
             # Add tokens for history
-            history = kwargs.get("history", [])
+            history = kwargs.get("history") or []
             for entry in history:
                 if isinstance(entry, dict) and "content" in entry:
                     content = entry["content"]

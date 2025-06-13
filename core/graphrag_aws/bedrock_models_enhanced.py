@@ -119,11 +119,8 @@ class EnhancedBedrockAnthropicChatLLM:
         if self.config.max_retries <= 0:
             return None
             
-        # Filter retryable errors based on Bedrock specifics
-        retryable_errors = [
-            error for error in BEDROCK_RETRYABLE_ERRORS
-            if not issubclass(error, Exception) or is_retryable_bedrock_error(error())
-        ]
+        # Use Bedrock retryable errors directly (they are already exception classes)
+        retryable_errors = BEDROCK_RETRYABLE_ERRORS
         
         return Retryer(
             retryable_errors=retryable_errors,
@@ -190,9 +187,9 @@ class EnhancedBedrockAnthropicChatLLM:
             return result_json
             
         except ClientError as e:
-            error_msg = f"AWS Bedrock ClientError: {e.response.get('Error', {}).get('Message', str(e))}"
-            logger.error(error_msg)
-            raise BedrockAPIError(error_msg) from e
+            # Re-raise ClientError directly for retry mechanism
+            logger.error(f"AWS Bedrock ClientError: {e.response.get('Error', {}).get('Message', str(e))}")
+            raise
         except json.JSONDecodeError as e:
             error_msg = f"Failed to parse Bedrock API response: {str(e)}"
             logger.error(error_msg)
@@ -388,9 +385,9 @@ class EnhancedBedrockEmbeddingLLM:
                 raise BedrockAPIError("No embedding found in response")
                 
         except ClientError as e:
-            error_msg = f"AWS Bedrock ClientError: {e.response.get('Error', {}).get('Message', str(e))}"
-            logger.error(error_msg)
-            raise BedrockAPIError(error_msg) from e
+            # Re-raise ClientError directly for retry mechanism
+            logger.error(f"AWS Bedrock ClientError: {e.response.get('Error', {}).get('Message', str(e))}")
+            raise
 
     async def aembed_batch(self, text_list: list[str], **kwargs) -> list[list[float]]:
         """Generate embeddings for a batch of texts."""
