@@ -1,0 +1,77 @@
+# GraphRAG configuration example for AWS Bedrock (without Nova models)
+
+# LLM Configuration for Anthropic Claude
+llm:
+  provider: "bedrock_anthropic_chat"
+  model: "anthropic.claude-3-5-sonnet-20241022-v2:0"
+  api_base: null  # Optional: custom Bedrock endpoint
+  max_tokens: 4096
+  temperature: 0.7
+  top_p: 0.9
+  
+# Embedding Configuration for Amazon Titan
+embeddings:
+  provider: "bedrock_text_embedding_v2"
+  model: "amazon.titan-embed-text-v2:0"
+  api_base: null  # Optional: custom Bedrock endpoint
+  dimensions: 1024  # Optional: for V2 models
+  normalize: true   # Optional: for V2 models
+
+# Input Configuration
+input:
+  type: "file"
+  file_type: "text"
+  base_dir: "./data/input"
+  file_pattern: "*.txt"
+  
+# Output Configuration  
+output:
+  type: "file"
+  base_dir: "./data/output"
+
+# Cache Configuration
+cache:
+  type: "file"
+  base_dir: "./cache"
+
+# Chunking Configuration
+chunks:
+  size: 1200
+  overlap: 100
+  group_by_columns: ["id"]
+
+# Entity Extraction Configuration
+entity_extraction:
+  prompt: "prompts/entity_extraction.txt"
+  entity_types: ["person", "organization", "location"]
+  max_gleanings: 1
+
+# Community Report Configuration
+community_reports:
+  prompt: "prompts/community_report.txt"
+  max_length: 2000
+  max_input_length: 8000
+
+# Claim Extraction Configuration (optional)
+claim_extraction:
+  enabled: false
+  prompt: "prompts/claim_extraction.txt"
+  description: "Any claims or facts that could be relevant to information discovery."
+  max_gleanings: 1
+
+# Local Search Configuration
+local_search:
+  text_unit_prop: 0.5
+  community_prop: 0.1
+  conversation_history_max_turns: 5
+  top_k_mapped_entities: 10
+  top_k_relationships: 10
+  max_tokens: 12000
+
+# Global Search Configuration  
+global_search:
+  max_tokens: 12000
+  data_max_tokens: 12000
+  map_max_tokens: 1000
+  reduce_max_tokens: 2000
+  concurrency: 32
