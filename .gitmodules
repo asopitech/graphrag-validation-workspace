@@ -1,0 +1,6 @@
+[submodule "upstream/ms_graphrag"]
+	path = upstream/ms_graphrag
+	url = https://github.com/microsoft/graphrag.git
+[submodule "upstream/ms_essex-toolkit"]
+	path = upstream/ms_essex-toolkit
+	url = https://github.com/microsoft/essex-toolkit.git
