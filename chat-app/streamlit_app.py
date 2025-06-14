@@ -34,7 +34,7 @@ logger = logging.getLogger(__name__)
 # Page configuration
 st.set_page_config(
     page_title="Enhanced AWS Bedrock Chat",
-    page_icon="=�",
+    page_icon="💬",
     layout="wide",
     initial_sidebar_state="expanded"
 )
@@ -100,7 +100,7 @@ def initialize_session_state():
 
 def create_sidebar():
     """Create sidebar with configuration options."""
-    st.sidebar.title("=' Configuration")
+    st.sidebar.title("⚙️ Configuration")
     
     # Model selection
     model_choice = st.sidebar.selectbox(
@@ -209,7 +209,7 @@ async def generate_response(llm, prompt, history):
 
 def main():
     """Main Streamlit application."""
-    st.title("=� Enhanced AWS Bedrock Chat")
+    st.title("💬 Enhanced AWS Bedrock Chat")
     st.markdown("*Powered by fnllm-inspired features: Rate Limiting, Retries, and Advanced Error Handling*")
     
     # Initialize session state
@@ -229,14 +229,14 @@ def main():
                 st.session_state.llm = llm
                 st.sidebar.success(" LLM initialized successfully!")
             else:
-                st.sidebar.error(f"L Error: {error}")
+                st.sidebar.error(f"❌ Error: {error}")
     
     # AWS credentials check
     if not os.getenv("AWS_ACCESS_KEY_ID"):
         st.warning("� AWS credentials not found. Please set AWS_ACCESS_KEY_ID, AWS_SECRET_ACCESS_KEY, and AWS_REGION environment variables.")
     
     # Chat interface
-    st.subheader("=� Chat Interface")
+    st.subheader("💬 Chat Interface")
     
     # Display chat messages
     for message in st.session_state.messages:
@@ -268,30 +268,30 @@ def main():
                     st.markdown(response)
                     st.session_state.messages.append({"role": "assistant", "content": response})
                 else:
-                    error_msg = f"L Error generating response: {error}"
+                    error_msg = f"❌ Error generating response: {error}"
                     st.error(error_msg)
                     st.session_state.messages.append({"role": "assistant", "content": error_msg})
     
     # Configuration display
-    with st.expander("= Current Configuration", expanded=False):
+    with st.expander("📋 Current Configuration", expanded=False):
         st.json(config)
     
     # Chat history management
     col1, col2 = st.columns(2)
     with col1:
-        if st.button("=� Clear Chat History"):
+        if st.button("🗑️ Clear Chat History"):
             st.session_state.messages = []
             st.rerun()
     
     with col2:
-        if st.button("=� Export Chat"):
+        if st.button("💬 Export Chat"):
             chat_export = {
                 "messages": st.session_state.messages,
                 "config": config,
                 "timestamp": str(pd.Timestamp.now())
             }
             st.download_button(
-                "=� Download Chat JSON",
+                "💬 Download Chat JSON",
                 json.dumps(chat_export, indent=2),
                 "chat_export.json",
                 "application/json"
